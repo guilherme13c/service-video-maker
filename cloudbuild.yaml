@@ -5,6 +5,8 @@ steps:
               "build",
               "-t",
               "$_REGION-docker.pkg.dev/$PROJECT_ID/$REPO_NAME/$REPO_NAME:$COMMIT_SHA",
+              "--cache-from",
+              "$_REGION-docker.pkg.dev/$PROJECT_ID/$REPO_NAME/$REPO_NAME:latest",
               ".",
           ]
     - name: gcr.io/cloud-builders/docker
