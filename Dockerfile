@@ -10,13 +10,12 @@ COPY go.mod ./
 COPY go.sum ./
 RUN go mod download
 
-
-RUN go build main.go
+RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build main.go -o service
 
 FROM alpine:3.14
 WORKDIR /app
 
-COPY --from=build /app/main /app/main
+COPY --from=build /app/service /app/service
 EXPOSE 8080
 
-CMD [ "./main" ]
+CMD [ "./service" ]
