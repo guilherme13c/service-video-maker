@@ -3,19 +3,19 @@ steps:
       args:
           - build
           - "-t"
-          - "us-central1.gcr.io/$PROJECT_ID/$REPO_NAME:$COMMIT_SHA"
+          - "gcr.io/$PROJECT_ID/$REPO_NAME:$COMMIT_SHA"
           - .
     - name: gcr.io/cloud-builders/docker
       args:
           - push
-          - "us-central1.gcr.io/$PROJECT_ID/$REPO_NAME:$COMMIT_SHA"
+          - "gcr.io/$PROJECT_ID/$REPO_NAME:$COMMIT_SHA"
     - name: gcr.io/google.com/cloudsdktool/cloud-sdk
       args:
           - run
           - deploy
           - "$REPO_NAME"
           - "--image"
-          - "us-central1.gcr.io/$PROJECT_ID/$REPO_NAME:$COMMIT_SHA"
+          - "gcr.io/$PROJECT_ID/$REPO_NAME:$COMMIT_SHA"
           - "--region"
           - $_REGION
           - "--set-env-vars=ENVIRONMENT=PRODUCTION"
@@ -28,7 +28,7 @@ steps:
           - "--service-account=$_SERVICE_ACCOUNT"
       entrypoint: gcloud
 images:
-    - "us-central1.gcr.io/$PROJECT_ID/$REPO_NAME:$COMMIT_SHA"
+    - "gcr.io/$PROJECT_ID/$REPO_NAME:$COMMIT_SHA"
 
 options:
     logging: CLOUD_LOGGING_ONLY
