@@ -10,7 +10,7 @@ COPY go.mod ./
 COPY go.sum ./
 RUN go mod download
 
-RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build main.go -o service
+RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o service
 
 FROM alpine:3.14
 WORKDIR /app
