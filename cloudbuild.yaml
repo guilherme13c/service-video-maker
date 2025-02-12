@@ -3,33 +3,38 @@ steps:
       args:
           - build
           - "-t"
-          - "gcr.io/$PROJECT_ID/$REPO_NAME:$COMMIT_SHA"
+          - "us-central1.gcr.io/$PROJECT_ID/$REPO_NAME:$COMMIT_SHA"
           - .
     - name: gcr.io/cloud-builders/docker
       args:
           - push
-          - "gcr.io/$PROJECT_ID/$REPO_NAME:$COMMIT_SHA"
+          - "us-central1.gcr.io/$PROJECT_ID/$REPO_NAME:$COMMIT_SHA"
     - name: gcr.io/google.com/cloudsdktool/cloud-sdk
       args:
           - run
           - deploy
           - "$REPO_NAME"
           - "--image"
-          - "gcr.io/$PROJECT_ID/$REPO_NAME:$COMMIT_SHA"
+          - "us-central1.gcr.io/$PROJECT_ID/$REPO_NAME:$COMMIT_SHA"
           - "--region"
-          - us-central1
+          - $_REGION
           - "--set-env-vars=ENVIRONMENT=PRODUCTION"
           - "--timeout=600"
           - "--memory=128Mi"
           - "--min-instances=0"
-          - >-
-              --service-account=service-video-maker@$PROJECT_ID.iam.gserviceaccount.com
           - "--cpu=1"
           - "--concurrency=120"
           - "--allow-unauthenticated"
+          - "--service-account=$_SERVICE_ACCOUNT"
       entrypoint: gcloud
 images:
-    - "gcr.io/$PROJECT_ID/$REPO_NAME:$COMMIT_SHA"
+    - "us-central1.gcr.io/$PROJECT_ID/$REPO_NAME:$COMMIT_SHA"
 
 options:
     logging: CLOUD_LOGGING_ONLY
+
+substitutions:
+    _REGION: us-central1
+    _SERVICE_ACCOUNT: service-video-maker@$PROJECT_ID.iam.gserviceaccount.com
+
+serviceAccount: "projects/$PROJECT_ID/serviceAccounts/service-video-maker@$PROJECT_ID.iam.gserviceaccount.com"

@@ -4,7 +4,7 @@ WORKDIR /app
 
 COPY . .
 
-RUN apk update && apk upgrade && apk add git
+RUN apk update && apk upgrade && apk add git tzdata ffmpeg
 
 COPY go.mod ./
 COPY go.sum ./
@@ -17,7 +17,6 @@ FROM alpine:3.14
 WORKDIR /app
 
 COPY --from=build /app/main /app/main
-RUN apk add --no-cache tzdata && apk add --no-cache ffmpeg
 EXPOSE 8080
 
 CMD [ "./main" ]
