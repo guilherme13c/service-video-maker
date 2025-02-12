@@ -6,8 +6,6 @@ COPY /root/* /root/
 
 RUN apk update && apk upgrade && apk add git
 
-RUN git config --global url."https://"$( cat /root/token )":x-oauth-basic@github.com/".insteadOf "https://github.com/"
-
 COPY go.mod ./
 COPY go.sum ./
 RUN go mod download

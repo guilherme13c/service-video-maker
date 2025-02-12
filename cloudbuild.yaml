@@ -1,12 +1,4 @@
 steps:
-    - name: gcr.io/cloud-builders/git
-      secretEnv: ["GITHUB_TOKEN"]
-      entrypoint: "bash"
-      args:
-          - -c
-          - |
-              echo "$$GITHUB_TOKEN" >> /root/token
-              cp -r /root/ /workspace/
     - name: gcr.io/cloud-builders/docker
       args:
           - build
