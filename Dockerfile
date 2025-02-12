@@ -2,7 +2,7 @@ FROM golang:1.23.4-alpine as build
 
 WORKDIR /app
 
-COPY /root/* /root/
+COPY . .
 
 RUN apk update && apk upgrade && apk add git
 
@@ -10,7 +10,6 @@ COPY go.mod ./
 COPY go.sum ./
 RUN go mod download
 
-COPY . .
 
 RUN go build main.go
 
