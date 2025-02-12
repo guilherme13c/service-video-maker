@@ -1,46 +1,33 @@
 steps:
-    - name: gcr.io/cloud-builders/docker
+    - name: "gcr.io/cloud-builders/docker"
       args:
           [
               "build",
               "-t",
-              "$_REGION-docker.pkg.dev/$PROJECT_ID/$REPO_NAME/$REPO_NAME:$COMMIT_SHA",
-              "--cache-from",
-              "$_REGION-docker.pkg.dev/$PROJECT_ID/$REPO_NAME/$REPO_NAME:latest",
+              "us-central1-docker.pkg.dev/$PROJECT_ID/$REPO_NAME/$_REPO_NAME:$COMMIT_SHA",
               ".",
           ]
-    - name: gcr.io/cloud-builders/docker
+
+    - name: "gcr.io/cloud-builders/docker"
       args:
           [
               "push",
-              "$_REGION-docker.pkg.dev/$PROJECT_ID/$REPO_NAME/$REPO_NAME:$COMMIT_SHA",
+              "us-central1-docker.pkg.dev/$PROJECT_ID/$REPO_NAME/$_REPO_NAME:$COMMIT_SHA",
           ]
-    - name: gcr.io/google.com/cloudsdktool/cloud-sdk
-      entrypoint: gcloud
+
+    - name: "gcr.io/google.com/cloudsdktool/cloud-sdk"
       args:
-          [
-              "run",
-              "deploy",
-              "$REPO_NAME",
-              "--image",
-              "$_REGION-docker.pkg.dev/$PROJECT_ID/$REPO_NAME/$REPO_NAME:$COMMIT_SHA",
-              "--region",
-              "$_REGION",
-              "--set-env-vars=ENVIRONMENT=PRODUCTION",
-              "--timeout=600",
-              "--memory=128Mi",
-              "--min-instances=0",
-              "--cpu=1",
-              "--concurrency=120",
-              "--allow-unauthenticated",
-              "--service-account=$_SERVICE_ACCOUNT",
-          ]
+          - "run"
+          - "deploy"
+          - $_REPO_NAME
+          - "--image=us-central1-docker.pkg.dev/$PROJECT_ID/$REPO_NAME/$_REPO_NAME:$COMMIT_SHA"
+          - "--region=us-central1"
+          - "--set-env-vars=ENVIRONMENT=PRODUCTION"
+          - "--platform=managed"
+          - "--allow-unauthenticated"
+          - "--memory=128Mi"
+          - "--concurrency=120"
+          - "--timeout=600"
+
 images:
-    - "$_REGION-docker.pkg.dev/$PROJECT_ID/$REPO_NAME:$COMMIT_SHA"
-
-options:
-    logging: CLOUD_LOGGING_ONLY
-
-substitutions:
-    _REGION: us-central1
-    _SERVICE_ACCOUNT: service-video-maker@$PROJECT_ID.iam.gserviceaccount.com
+    - "us-central1-docker.pkg.dev/$PROJECT_ID/$REPO_NAME/$_REPO_NAME:$COMMIT_SHA"
