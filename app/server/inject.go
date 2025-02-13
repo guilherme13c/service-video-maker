@@ -27,7 +27,6 @@ func (hs *httpServer) GetFiberApp() *fiber.App {
 }
 
 func (hs *httpServer) Run() {
-	log.Printf("Server running on port %s", hs.cfg.Port)
 	err := hs.Listen(":" + hs.cfg.Port)
 	if err != nil {
 		log.Fatal(err)
