@@ -17,27 +17,19 @@ import (
 )
 
 func main() {
-	log.Println("Starting service...")
-
-	log.Println("Loading config...")
 	cfg, errCfg := config.New()
 	if errCfg != nil {
 		log.Fatalf("Error loading config: %v", errCfg)
 	}
 
-	log.Println("Creating rest client...")
 	restClient := resty.New()
 
-	log.Println("Creating repository...")
 	repository := repository.NewRepository()
 
-	log.Println("Creating service...")
 	service := service.NewService(restClient, repository)
 
-	log.Println("Creating rest handler...")
 	restHandler := restHandler.NewRestHandler(service)
 
-	log.Println("Creating server...")
 	s := server.NewHttpServer(cfg, restHandler)
 
 	//Set shutdown server
@@ -53,7 +45,6 @@ func main() {
 		_ = app.ShutdownWithTimeout(30 * time.Second)
 	}()
 
-	log.Println("Running server...")
 	s.Run()
 
 	serverShutdown.Wait()

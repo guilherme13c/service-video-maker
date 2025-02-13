@@ -27,6 +27,7 @@ func (hs *httpServer) GetFiberApp() *fiber.App {
 }
 
 func (hs *httpServer) Run() {
+	log.Printf("Server running on port %s", hs.cfg.Port)
 	err := hs.Listen(":" + hs.cfg.Port)
 	if err != nil {
 		log.Fatal(err)
@@ -40,16 +41,9 @@ type httpServer struct {
 }
 
 func NewHttpServer(cfg *config.Config, restHandler resthandler.IRestHandler) IServer {
-	prefork := false
-	if cfg.Environment == "PRODUCTION" {
-		prefork = true
-	}
-
 	server := new(httpServer)
 
-	server.App = fiber.New(fiber.Config{
-		Prefork: prefork,
-	})
+	server.App = fiber.New()
 	server.cfg = cfg
 	server.restHandler = restHandler
 
